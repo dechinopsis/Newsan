@@ -23,18 +23,18 @@
 		</property>
 	</bean>
 
-	<bean id="dataSource"
+	<bean id="myDataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+		<property name="driverClassName" value="net.sourceforge.jtds.jdbc.Driver" />
 		<property name="url"
-			value="jdbc:sqlserver://localhost:1433;databaseName=NewSanSandbox;integratedSecurity=true;" />
-		<property name="username" value="root" />
-		<property name="password" value="root" />
+			value="jdbc:jtds:sqlserver://localhost/NewSanSandBox;" />
+		<property name="username" value="sa" />
+		<property name="password" value="david" />
 	</bean>
 
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-		<property name="dataSource" ref="dataSource" />
+		<property name="dataSource" ref="myDataSource" />
 		<property name="packagesToScan" value="com.newsan.spring.domain"/>
 		<property name="hibernateProperties">
 			<props>
@@ -47,5 +47,8 @@
 	<bean id="transactionManager"
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager"
 		 p:sessionFactory-ref="sessionFactory">
-	</bean>  
+	</bean>
+	<bean id="USERDAOIMPL" class="com.newsan.spring.dao.NUserDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>	  
 </beans>

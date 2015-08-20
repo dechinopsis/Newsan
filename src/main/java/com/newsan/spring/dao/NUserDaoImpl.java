@@ -6,10 +6,13 @@ import org.springframework.stereotype.Service;
 
 import com.newsan.spring.domain.NUser;
   
-@Service
-public class NUserDaoImpl implements NUserDao {
-	@Autowired
+public class NUserDaoImpl implements NUserDao {	
     private SessionFactory sessionFactory;
+
+    @Autowired
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
 
 	public NUser getUser(int userId) {			
 		NUser resultUser = (NUser) sessionFactory.openSession().get(NUser.class, userId);
