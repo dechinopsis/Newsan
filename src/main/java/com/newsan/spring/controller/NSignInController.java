@@ -35,7 +35,8 @@ public class NSignInController {
 			}else{
 				pLoginParms.setlStatus(true);
 			}
-		}		
+		}
+		System.out.println("Finish Method NSignInWrapper");
 		return pLoginParms;
 	}
 	@RequestMapping("/")
