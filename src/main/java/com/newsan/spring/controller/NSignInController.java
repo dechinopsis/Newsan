@@ -1,4 +1,6 @@
 package com.newsan.spring.controller;
+import java.io.UnsupportedEncodingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,9 +22,20 @@ public class NSignInController {
 		this.userDao = userDao;
 	}
 	@RequestMapping(value = "requestLogin", method = RequestMethod.POST)
-	public @ResponseBody NSignInWrapper login(@RequestBody NSignInWrapper pLoginParms) {		
-		NUser nuser = userDao.getUser(1);
-		pLoginParms.setcMessage(nuser.getName());
+	public @ResponseBody NSignInWrapper login(@RequestBody NSignInWrapper pLoginParms) throws UnsupportedEncodingException {		
+		NUser nuser = userDao.getUserByName(pLoginParms.getcUser());
+		if(nuser==null){
+			pLoginParms.setlStatus(false);
+			pLoginParms.setcMessage("Unregistered user");
+		}else{
+			String decodedPass = new String(nuser.getKey(), "UTF-8");
+			if(decodedPass.compareTo(pLoginParms.getcPassword())!=0){
+				pLoginParms.setlStatus(false);
+				pLoginParms.setcMessage("Wrong password for user "+pLoginParms.getcUser());
+			}else{
+				pLoginParms.setlStatus(true);
+			}
+		}		
 		return pLoginParms;
 	}
 	@RequestMapping("/")

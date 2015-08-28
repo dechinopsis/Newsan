@@ -8,7 +8,7 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-<title>NewSan</title>
+<title>NewSan Login</title>
 <style>
 body {
 	padding-top: 40px;
@@ -59,8 +59,9 @@ body {
 </head>
 <body> 
 	<div class="container">
+		<div class="alert alert-danger" role="alert" id="errorMessage" style="display:none;"></div>
 		<form class="form-signin">
-			<h2 class="form-signin-heading">Newsan Login</h2>
+			<center><h2 class="form-signin-heading">Newsan Login</h2></center>
 			<label class="sr-only">Usuario</label> <input id="inputUser"
 				class="form-control" placeholder="User" required autofocus /> <label
 				for="inputPassword" class="sr-only">Password</label> <input
@@ -80,6 +81,7 @@ body {
 					"cUser" : user,
 					"cPassword" : password
 					};
+			$('#errorMessage').fadeOut();
 			$.ajax({
 	            url: "/NewSan/rest/login/requestLogin",
 	            data: JSON.stringify(json),
@@ -93,7 +95,13 @@ body {
 	            success: function(result) {
 	            	$('#loginBtn').removeAttr('disabled');
 	            	$('#loginBtn').html('Iniciar Sesión');
-	            	alert(result.cMessage);
+	            	window.console.log('Results: '+JSON.stringify(result));
+	            	if(!result.lStatus){
+	            		$('#errorMessage').html("<b>Login Failed: </b>"+result.cMessage);
+	            		$('#errorMessage').slideDown();
+	            	}else{
+	            		window.location = "/NewSan/app/";
+	            	}
 	            },
 	            error:function(data,status,er) { 
 	            	window.console.log("error: "+JSON.stringify(data)+" status: "+status+" er:"+er);
